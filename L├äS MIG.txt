@@ -1,0 +1,51 @@
+VECKOPLANERING – INSTALLERBAR APP MED SYNK
+==========================================
+
+INNEHÅLL
+  index.html             Själva appen
+  manifest.webmanifest   Namn, färger och ikoner för installationen
+  sw.js                  Offline-stöd
+  icons/                 Appikoner
+
+1. SUPABASE (databasen)
+  - Skapa projekt på supabase.com (region North EU / Stockholm).
+  - SQL Editor -> New query -> klistra in SQL-koden från Claude -> Run.
+  - Project Settings -> API: kopiera "Project URL" och "anon public key".
+
+2. FYLL I NYCKLARNA
+  Öppna index.html i Anteckningar (högerklick -> Öppna med -> Anteckningar).
+  Sök efter "CHANGE HERE" och ersätt:
+     https://DIN-PROJEKT-ID.supabase.co   ->  din Project URL
+     DIN-ANON-KEY                         ->  din anon public key
+  Spara filen. (Nyckeln är publik med avsikt – datan skyddas av
+  säkerhetsreglerna i databasen.)
+
+3. LADDA UPP TILL GITHUB
+  - Öppna ditt repository "veckoplanering" på github.com.
+  - Klicka "uploading an existing file" (eller Add file -> Upload files).
+  - Dra in ALLA filer och mappen icons från den uppackade zip-filen.
+  - Klicka "Commit changes".
+
+4. SLÅ PÅ GITHUB PAGES
+  - Settings -> Pages.
+  - Source: "Deploy from a branch". Branch: main, mapp: / (root) -> Save.
+  - Efter någon minut visas adressen:
+       https://<ditt-användarnamn>.github.io/veckoplanering/
+
+5. TALA OM FÖR SUPABASE VAR APPEN BOR
+  - Supabase: Authentication -> URL Configuration.
+  - Site URL: din GitHub Pages-adress från steg 4 -> Save.
+  (Behövs för att bekräftelselänken i mejlet ska leda rätt.)
+
+6. INSTALLERA OCH LOGGA IN
+  - Öppna adressen. Dator (Edge/Chrome): "Installera app" i adressfältet.
+    Android: meny ⋮ -> Installera app. iPhone (Safari): Dela -> Lägg till på hemskärmen.
+  - Klicka "Logga in" uppe till höger -> "Skapa konto" första gången.
+    Bekräfta via mejlet, logga sedan in. Gör samma inloggning på mobilen.
+
+FLYTTA MED GAMLA UPPGIFTER
+  I den gamla lokala versionen: Inställningar -> Exportera säkerhetskopia.
+  I appen (inloggad): Inställningar -> Importera säkerhetskopia.
+
+UPPDATERINGAR
+  Ladda upp nya filer på samma sätt (de ersätter de gamla).

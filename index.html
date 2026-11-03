@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Veckoplanering</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#060508">
+<meta name="description" content="Planera veckan, bocka av och se ringen fyllas.">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Veckoplan">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f1fa; --glow1:#c9a8ff; --glow2:#ff9fd0;
+  --panel:rgba(255,255,255,.72); --panel-solid:#ffffff; --panel-2:#f6f0fc; --ink:#1a1224; --muted:#6f6480;
+  --line:rgba(80,30,120,.10); --accent:#8a3ffc; --accent-2:#e0338f; --accent-ink:#ffffff; --track:rgba(90,40,140,.10);
+  --grad:linear-gradient(120deg,#6a2cf0 0%,#b23cf2 45%,#ec2f8e 100%);
+  --sheen:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,0) 60%);
+  --prio-high:#ec2f6e; --prio-norm:rgba(90,40,140,.18); --prio-low:#9b7bff;
+  --shadow:0 1px 2px rgba(60,10,90,.06),0 10px 30px rgba(60,10,90,.08);
+  --shadow-hover:0 8px 24px rgba(140,40,200,.18),0 0 0 1px rgba(178,60,242,.25);
+  --drop:rgba(178,60,242,.10); --chip:rgba(138,63,252,.10); --chip-ink:#7a2fe0;
+  --spot:rgba(178,60,242,.10); --orb-op:.5; --band-op:.55; --orb-sheen:.35; --orb-mid:#f3e3fb; --band-bg:linear-gradient(90deg,transparent 0%,#ead6ff 18%,#cf9cf5 50%,#ead6ff 82%,transparent 100%); --font:"Source Serif 4","Source Serif Pro",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#060508; --glow1:#4b1c8f; --glow2:#7a1550;
+  --panel:rgba(18,14,26,.66); --panel-solid:#120e1a; --panel-2:#1b1526; --ink:#f1ecf7; --muted:#9a8fae;
+  --line:rgba(255,255,255,.07); --accent:#b46cff; --accent-2:#ff3d9a; --accent-ink:#0b0710; --track:rgba(255,255,255,.07);
+  --grad:linear-gradient(120deg,#7b2ff7 0%,#c13cff 45%,#ff2e93 100%);
+  --sheen:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 50%);
+  --prio-high:#ff3d7f; --prio-norm:rgba(255,255,255,.10); --prio-low:#8c6cff;
+  --shadow:0 1px 1px rgba(0,0,0,.5),0 12px 34px rgba(0,0,0,.45);
+  --shadow-hover:0 10px 30px rgba(193,60,255,.25),0 0 0 1px rgba(193,60,255,.35);
+  --drop:rgba(193,60,255,.12); --chip:rgba(180,108,255,.14); --chip-ink:#d6b4ff;
+  --spot:rgba(193,60,255,.16); --orb-op:.9; --band-op:.6; --orb-sheen:1; --orb-mid:#2a0a2e; --band-bg:linear-gradient(90deg,transparent 0%,#3a0f5c 18%,#8b39c9 50%,#3a0f5c 82%,transparent 100%);
+}}
+:root[data-theme="dark"]{
+  --bg:#060508; --glow1:#4b1c8f; --glow2:#7a1550;
+  --panel:rgba(18,14,26,.66); --panel-solid:#120e1a; --panel-2:#1b1526; --ink:#f1ecf7; --muted:#9a8fae;
+  --line:rgba(255,255,255,.07); --accent:#b46cff; --accent-2:#ff3d9a; --accent-ink:#0b0710; --track:rgba(255,255,255,.07);
+  --grad:linear-gradient(120deg,#7b2ff7 0%,#c13cff 45%,#ff2e93 100%);
+  --sheen:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 50%);
+  --prio-high:#ff3d7f; --prio-norm:rgba(255,255,255,.10); --prio-low:#8c6cff;
+  --shadow:0 1px 1px rgba(0,0,0,.5),0 12px 34px rgba(0,0,0,.45);
+  --shadow-hover:0 10px 30px rgba(193,60,255,.25),0 0 0 1px rgba(193,60,255,.35);
+  --drop:rgba(193,60,255,.12); --chip:rgba(180,108,255,.14); --chip-ink:#d6b4ff;
+  --spot:rgba(193,60,255,.16); --orb-op:.9; --band-op:.6; --orb-sheen:1; --orb-mid:#2a0a2e; --band-bg:linear-gradient(90deg,transparent 0%,#3a0f5c 18%,#8b39c9 50%,#3a0f5c 82%,transparent 100%);
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{background:transparent}
+html,body{margin:0;min-height:100%;color:var(--ink);
+  font:400 14px/1.5 var(--font);-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+::selection{background:var(--accent);color:#fff}
+.caps{text-transform:uppercase;letter-spacing:.28em;font-weight:400}
+
+/* ---------- Bakgrundskonst: klot + band ---------- */
+.bg-art{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:var(--bg)}
+.bg-art .orb{position:absolute;width:min(78vw,900px);aspect-ratio:1;border-radius:50%;
+  left:50%;top:58%;transform:translate(-50%,-50%);opacity:var(--orb-op);
+  background:
+    conic-gradient(from 180deg at 50% 100%, transparent 0deg, rgba(255,255,255,.18) 20deg, transparent 40deg, transparent 320deg, rgba(255,255,255,.12) 340deg, transparent 360deg),
+    linear-gradient(180deg,#8d3fc9 0%,#a23cc0 42%,var(--orb-mid) 50%,#c22a8a 58%,#ff3fa4 100%);
+  filter:saturate(1.1);animation:orbFloat 18s ease-in-out infinite}
+.bg-art .orb::after{content:"";position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent,rgba(255,80,190,.35),transparent 30%,rgba(140,70,255,.35),transparent 65%);
+  mix-blend-mode:screen;opacity:var(--orb-sheen);animation:spin 28s linear infinite}
+.bg-art .band{position:absolute;left:0;right:0;top:calc(58% - 13%);height:18%;opacity:var(--band-op);
+  background:var(--band-bg);
+  box-shadow:0 0 80px rgba(160,60,230,.3)}
+.bg-art .veil{position:absolute;inset:0;
+  background:radial-gradient(140% 90% at 50% 60%, transparent 35%, var(--bg) 80%),
+             linear-gradient(180deg, color-mix(in srgb,var(--bg) 30%,transparent) 0%, color-mix(in srgb,var(--bg) 10%,transparent) 60%, color-mix(in srgb,var(--bg) 40%,transparent) 100%)}
+.bg-art .grain{position:absolute;inset:-50%;opacity:.05;
+  background-image:radial-gradient(rgba(255,255,255,.8) 1px, transparent 1px);background-size:3px 3px}
+
+/* ---------- Header ---------- */
+.top{display:flex;align-items:center;gap:24px;padding:calc(18px + env(safe-area-inset-top)) 28px 18px;flex-wrap:wrap;position:sticky;top:0;z-index:30;
+  background:color-mix(in srgb,var(--panel-solid) 55%,transparent);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5)}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:var(--grad);opacity:.6}
+.brand{font-weight:300;font-size:17px;text-transform:uppercase;letter-spacing:.32em}
+.brand .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:500}
+.brand small{display:block;font-size:10px;letter-spacing:.38em;color:var(--muted);margin-top:4px}
+.nav{display:flex;align-items:center;gap:8px}
+.btn{border:1px solid var(--line);background:color-mix(in srgb,var(--panel-solid) 70%,transparent);border-radius:999px;
+  padding:7px 16px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.18em;
+  transition:transform .2s, box-shadow .2s, border-color .2s, background .2s;position:relative;overflow:hidden}
+.btn:hover{border-color:var(--accent);box-shadow:0 0 18px rgba(193,60,255,.25);transform:translateY(-1px)}
+.btn:active{transform:scale(.96)}
+.nav .btn#prev,.nav .btn#next{width:34px;height:34px;padding:0;font-size:16px;letter-spacing:0}
+.btn.primary{background:var(--grad);background-size:200% 100%;color:#fff;border-color:transparent;
+  box-shadow:0 6px 22px rgba(193,60,255,.35);animation:gradShift 6s ease infinite}
+.btn.danger{color:var(--prio-high)}
+.btn::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);
+  transform:translateX(-120%);transition:transform .6s}
+.btn:hover::before{transform:translateX(120%)}
+.weeklabel{min-width:170px;text-align:center}
+.weeklabel b{display:block;font-size:15px;font-weight:500;text-transform:uppercase;letter-spacing:.3em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.weeklabel span{font-size:11px;color:var(--muted);letter-spacing:.12em}
+.summary{display:flex;align-items:center;gap:16px;margin-left:auto}
+.summary .stats{font-size:12px;color:var(--muted);line-height:1.7}
+.summary .stats b{color:var(--ink);font-size:15px;font-weight:600}
+.menuwrap{position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 8px);background:var(--panel-solid);border:1px solid var(--line);
+  border-radius:16px;box-shadow:var(--shadow);padding:8px;min-width:260px;z-index:40;display:none}
+.menu.open{display:block;animation:pop .2s ease-out}
+.menu label{display:flex;gap:8px;align-items:center;padding:7px 10px;border-radius:10px;font-size:13px}
+.menu label:hover,.menu button:hover{background:var(--panel-2)}
+.menu button{display:block;width:100%;text-align:left;border:0;background:none;padding:7px 10px;border-radius:10px;font-size:13px}
+.menu hr{border:0;border-top:1px solid var(--line);margin:6px 0}
+.menu input[type=checkbox]{accent-color:var(--accent)}
+
+/* ---------- Tavla ---------- */
+.board{display:grid;gap:16px;padding:24px 28px 40px;overflow-x:auto;align-items:start}
+.col{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:22px;min-width:200px;
+  display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:hidden;
+  backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
+  transition:transform .25s, box-shadow .25s, background .2s;animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.board .col:nth-child(2){animation-delay:.04s}.board .col:nth-child(3){animation-delay:.08s}
+.board .col:nth-child(4){animation-delay:.12s}.board .col:nth-child(5){animation-delay:.16s}
+.board .col:nth-child(6){animation-delay:.2s}.board .col:nth-child(7){animation-delay:.24s}.board .col:nth-child(8){animation-delay:.28s}
+.col::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%), var(--spot), transparent 70%)}
+.col:hover::before{opacity:1}
+.col::after{content:"";position:absolute;left:0;right:0;top:0;height:60px;background:var(--sheen);pointer-events:none;opacity:.7}
+.col.drop{background:var(--drop);transform:translateY(-3px) scale(1.012);box-shadow:var(--shadow-hover)}
+.col.today{border:1px solid transparent;
+  background:linear-gradient(var(--panel-solid),var(--panel-solid)) padding-box,
+             linear-gradient(120deg,#7b2ff7,#c13cff,#ff2e93,#7b2ff7) border-box;
+  background-size:100% 100%, 300% 300%;animation:rise .6s cubic-bezier(.2,.8,.2,1) both, borderFlow 8s linear infinite;
+  box-shadow:0 0 0 1px rgba(193,60,255,.15),0 14px 40px rgba(193,60,255,.28)}
+.col.today .dayname{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.col.past{opacity:.82}
+.col.inbox{background:color-mix(in srgb,var(--panel) 70%,transparent);border-style:dashed}
+.head{position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:16px 14px 10px;cursor:pointer}
+.head:hover .ring{transform:scale(1.08) rotate(-6deg)}
+.col.inbox .head{cursor:default}
+.dayname{font-weight:500;text-transform:uppercase;letter-spacing:.22em;font-size:12px}
+.daydate{font-size:12px;color:var(--muted);font-weight:300;margin-top:1px}
+.daycount{font-size:11px;color:var(--muted);margin-top:1px;letter-spacing:.04em}
+.tasks{position:relative;z-index:1;list-style:none;margin:0;padding:4px 10px;min-height:40px;flex:1}
+.task{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;margin:5px 0;position:relative;
+  background:color-mix(in srgb,var(--panel-solid) 85%,transparent);border:1px solid var(--line);border-radius:14px;cursor:grab;
+  transition:transform .2s, box-shadow .2s, border-color .2s, opacity .25s;animation:taskIn .35s ease-out both}
+.task::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--prio-norm)}
+.task.p-high::before{background:linear-gradient(180deg,#ff2e93,#ff5a5a)}
+.task.p-low::before{background:linear-gradient(180deg,#8c6cff,#5a8cff)}
+.task:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:rgba(193,60,255,.35)}
+.task:active{cursor:grabbing}
+.task.dragging{opacity:.35;transform:rotate(-2deg) scale(.98)}
+.task.done{opacity:.6}
+.task.done .title{text-decoration:line-through;text-decoration-color:var(--accent);color:var(--muted)}
+.check{flex:none;width:20px;height:20px;margin-top:0;border:1.5px solid var(--muted);border-radius:50%;
+  background:none;padding:0;display:grid;place-items:center;transition:border-color .2s, transform .2s, box-shadow .2s}
+.check:hover{border-color:var(--accent-2);transform:scale(1.15);box-shadow:0 0 12px rgba(255,46,147,.45)}
+.task.done .check{background:var(--grad);border-color:transparent;box-shadow:0 0 10px rgba(193,60,255,.5)}
+.task.done .check.pop{animation:checkPop .45s cubic-bezier(.3,1.8,.5,1)}
+.task.done .check::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.tbody{flex:1;min-width:0}
+.title{word-wrap:break-word;font-weight:400}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;font-size:11px;color:var(--muted);align-items:center}
+.chip{background:var(--chip);color:var(--chip-ink);border-radius:999px;padding:1px 9px;font-weight:500;
+  font-size:10px;text-transform:uppercase;letter-spacing:.12em}
+.comment-preview{font-size:12px;color:var(--muted);margin-top:4px;font-style:italic;font-weight:300;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.placeholder{height:3px;border-radius:2px;background:var(--grad);margin:4px 0;box-shadow:0 0 14px #c13cff}
+.add{position:relative;z-index:1;padding:6px 10px 4px}
+.add input{width:100%;border:1px dashed var(--line);background:transparent;border-radius:12px;padding:8px 12px;
+  font-size:13px;transition:border-color .2s, box-shadow .2s, background .2s}
+.add input::placeholder{color:var(--muted);letter-spacing:.05em}
+.add input:hover{border-color:rgba(193,60,255,.5)}
+.add input:focus{outline:none;border-style:solid;border-color:var(--accent);background:var(--panel-solid);box-shadow:0 0 0 3px var(--drop),0 0 20px rgba(193,60,255,.2)}
+.foot{position:relative;z-index:1;padding:4px 10px 12px;display:flex;justify-content:flex-end}
+.foot button{font-size:10px;color:var(--muted);border:0;background:none;padding:5px 8px;border-radius:999px;
+  text-transform:uppercase;letter-spacing:.16em;transition:color .2s, background .2s}
+.foot button:hover{color:var(--ink);background:var(--drop)}
+.empty{font-size:12px;color:var(--muted);padding:10px 6px;text-align:center;font-weight:300}
+
+/* ---------- Ringar ---------- */
+.ring{flex:none;display:block;overflow:visible;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.ring circle{fill:none;stroke-linecap:round}
+.ring .trk{stroke:var(--track)}
+.ring .val{transition:stroke-dashoffset 1s cubic-bezier(.25,.9,.3,1), stroke 1s ease;filter:drop-shadow(0 0 4px currentColor)}
+.ring text{fill:var(--ink);font-weight:500;text-anchor:middle;dominant-baseline:central;font-family:var(--font)}
+.ring.goal{animation:glow 2.4s ease-in-out infinite}
+
+/* ---------- Dialoger ---------- */
+.overlay{position:fixed;inset:0;background:rgba(6,3,10,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:none;align-items:flex-start;justify-content:center;padding:6vh 16px;z-index:50;overflow-y:auto}
+.overlay.open{display:flex}
+.overlay.open .modal{animation:pop .3s cubic-bezier(.2,.9,.3,1.2)}
+.modal{position:relative;border-radius:26px;width:100%;max-width:560px;padding:26px;overflow:hidden;
+  background:var(--panel-solid);border:1px solid var(--line);box-shadow:0 30px 80px rgba(60,0,90,.5),0 0 0 1px rgba(193,60,255,.15)}
+.modal::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--grad)}
+.modal::after{content:"";position:absolute;width:340px;height:340px;right:-140px;top:-180px;border-radius:50%;
+  background:radial-gradient(circle,rgba(193,60,255,.25),transparent 70%);pointer-events:none}
+.modal.wide{max-width:780px}
+.modal h2{margin:0 0 4px;font-size:16px;font-weight:500;text-transform:uppercase;letter-spacing:.26em}
+.modal .sub{color:var(--muted);font-size:12px;margin-bottom:18px;letter-spacing:.12em;text-transform:uppercase}
+.field{position:relative;z-index:1;display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.2em}
+.field input,.field textarea,.field select{border:1px solid var(--line);background:var(--panel-2);border-radius:12px;padding:9px 12px;width:100%;
+  transition:border-color .2s, box-shadow .2s}
+.field textarea{min-height:90px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--drop),0 0 18px rgba(193,60,255,.15)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.actions{position:relative;z-index:1;display:flex;gap:8px;justify-content:space-between;margin-top:8px;flex-wrap:wrap}
+.daytop{position:relative;z-index:1;display:flex;gap:26px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+.legend{font-size:13px;line-height:2}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 8px currentColor}
+.goalmsg{font-weight:600;text-transform:uppercase;letter-spacing:.2em;font-size:11px;
+  background:linear-gradient(90deg,#3ddc84,#c13cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.daylist{padding:0}
+.daylist .task{cursor:default}
+.daylist .task .tbody{cursor:pointer}
+.small{font-size:12px;color:var(--muted)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--grad);color:#fff;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.2em;
+  padding:11px 22px;border-radius:999px;box-shadow:0 10px 30px rgba(193,60,255,.45);transition:.3s;z-index:60;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.confetti{position:fixed;width:7px;height:12px;border-radius:2px;pointer-events:none;z-index:70;will-change:transform,opacity}
+
+/* ---------- Synkstatus ---------- */
+.btn.sync{display:inline-flex;align-items:center;gap:8px}
+.btn.sync .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.btn.sync[data-s="ok"] .dot{background:#3ddc84;box-shadow:0 0 8px #3ddc84}
+.btn.sync[data-s="busy"] .dot{background:#c13cff;box-shadow:0 0 8px #c13cff;animation:pulse 1s ease-in-out infinite}
+.btn.sync[data-s="off"] .dot{background:#ffb020}
+.btn.sync[data-s="err"] .dot{background:#ff3d7f}
+@keyframes pulse{50%{opacity:.35}}
+
+/* ---------- Animationer ---------- */
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes taskIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(6px)}to{opacity:1;transform:none}}
+@keyframes checkPop{0%{transform:scale(.5)}60%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 3px rgba(61,220,132,.5))}50%{filter:drop-shadow(0 0 12px rgba(61,220,132,.9))}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes orbFloat{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-52%) scale(1.03)}}
+@keyframes borderFlow{0%{background-position:0 0,0% 50%}100%{background-position:0 0,300% 50%}}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.board.static .col:not(.today),.board.static .task{animation:none}
+.board.static .col.today{animation:borderFlow 8s linear infinite}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:700px){
+  .top{padding:14px 16px;gap:14px}
+  .board{padding:16px 16px 28px}
+  .summary{margin-left:0}
+  .brand{letter-spacing:.22em}
+}
+</style>
+</head>
+<body>
+<div class="bg-art" aria-hidden="true"><div class="band"></div><div class="orb"></div><div class="veil"></div><div class="grain"></div></div>
+
+<header class="top">
+  <div class="brand"><span class="grad">Veckoplanering</span><small>Bocka av – se ringen fyllas</small></div>
+  <div class="nav">
+    <button class="btn" id="prev" title="Föregående vecka">‹</button>
+    <div class="weeklabel"><b id="weekNo"></b><span id="weekRange"></span></div>
+    <button class="btn" id="next" title="Nästa vecka">›</button>
+    <button class="btn" id="todayBtn" title="Hoppa till aktuell vecka">Idag</button>
+  </div>
+  <div class="summary">
+    <div id="sumRing"></div>
+    <div class="stats" id="sumStats"></div>
+  </div>
+  <button class="btn sync" id="syncBtn" hidden title="Konto och synk"><span class="dot" id="syncDot"></span><span id="syncTxt">Logga in</span></button>
+  <div class="menuwrap">
+    <button class="btn" id="menuBtn">☰ Inställningar</button>
+    <div class="menu" id="menu">
+      <label><input type="checkbox" id="optWeekend"> Visa lördag och söndag</label>
+      <label><input type="checkbox" id="optInbox"> Visa inkorg (oplanerat)</label>
+      <label><input type="checkbox" id="optTime"> Väg ringen efter uppskattad tid</label>
+      <hr>
+      <label>Tema
+        <select id="optTheme" style="margin-left:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel-2)">
+          <option value="auto">Auto</option><option value="light">Ljust</option><option value="dark">Mörkt</option>
+        </select></label>
+      <hr>
+      <button id="installBtn" hidden>⤓ Installera som app</button>
+      <button id="exportBtn">⬇ Exportera säkerhetskopia (.json)</button>
+      <button id="importBtn">⬆ Importera säkerhetskopia</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </div>
+  </div>
+</header>
+
+<main class="board" id="board"></main>
+
+<!-- Uppgiftsdialog -->
+<div class="overlay" id="taskOverlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h2>Uppgift</h2>
+    <div class="sub" id="taskSub"></div>
+    <div class="field"><label for="tTitle">Titel</label><input id="tTitle"></div>
+    <div class="row">
+      <div class="field"><label for="tDate">Dag</label><input type="date" id="tDate"></div>
+      <div class="field"><label for="tEst">Uppskattad tid (min)</label><input type="number" min="0" step="5" id="tEst"></div>
+      <div class="field"><label for="tPrio">Prioritet</label>
+        <select id="tPrio"><option value="high">Hög</option><option value="norm">Normal</option><option value="low">Låg</option></select></div>
+    </div>
+    <div class="field"><label for="tTag">Projekt / tagg</label><input id="tTag" list="tagList" placeholder="t.ex. Projekt A"></div>
+    <datalist id="tagList"></datalist>
+    <div class="field"><label for="tComment">Kommentar</label><textarea id="tComment" placeholder="Småkommentarer, status, vad som återstår…"></textarea></div>
+    <div class="actions">
+      <div>
+        <button class="btn danger" id="tDelete">Ta bort</button>
+        <button class="btn" id="tTomorrow">Flytta till nästa dag →</button>
+      </div>
+      <button class="btn primary" id="tClose">Klar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dagdialog -->
+<div class="overlay" id="dayOverlay">
+  <div class="modal wide" role="dialog" aria-modal="true">
+    <h2 id="dTitle"></h2>
+    <div class="sub" id="dSub"></div>
+    <div class="daytop">
+      <div id="dRing"></div>
+      <div class="legend" id="dLegend"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label for="dGoal">Dagens mål (antal uppgifter, tomt = alla)</label><input type="number" min="1" id="dGoal"></div>
+      <div class="field"><label for="dGoalMin">Planerad arbetstid (min, tomt = summa uppskattning)</label><input type="number" min="1" step="15" id="dGoalMin"></div>
+    </div>
+    <div class="field"><label>Uppgifter</label>
+      <ul class="tasks daylist" id="dTasks" style="padding:0"></ul>
+      <div class="add" style="padding:6px 0 0"><input id="dAdd" placeholder="+ Lägg till uppgift och tryck Enter"></div>
+    </div>
+    <div class="field"><label for="dNote">Dagsanteckning</label><textarea id="dNote" placeholder="Hur gick dagen? Vad tar du med dig till imorgon?"></textarea></div>
+    <div class="actions">
+      <button class="btn" id="dMoveOpen">Flytta ofärdiga till nästa dag →</button>
+      <button class="btn primary" id="dClose">Stäng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Konto / synk -->
+<div class="overlay" id="acctOverlay">
+  <div class="modal" role="dialog" aria-modal="true" style="max-width:440px">
+    <h2>Konto och synk</h2>
+    <div class="sub" id="acctSub">Logga in för att synka mellan dator och mobil</div>
+    <div id="acctOut">
+      <div class="field"><label for="aEmail">E-post</label><input id="aEmail" type="email" autocomplete="email"></div>
+      <div class="field"><label for="aPass">Lösenord (minst 6 tecken)</label><input id="aPass" type="password" autocomplete="current-password"></div>
+      <div class="small" id="acctMsg" style="min-height:1.4em;margin-bottom:8px"></div>
+      <div class="actions">
+        <button class="btn" id="aSignup">Skapa konto</button>
+        <button class="btn primary" id="aLogin">Logga in</button>
+      </div>
+    </div>
+    <div id="acctIn" hidden>
+      <div class="field"><label>Inloggad som</label><div id="aWho" style="font-size:15px"></div></div>
+      <div class="small" id="acctStatus" style="margin-bottom:14px"></div>
+      <div class="actions">
+        <button class="btn danger" id="aLogout">Logga ut</button>
+        <div><button class="btn" id="aSyncNow">Synka nu</button> <button class="btn primary" id="aClose">Stäng</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* =========================================================
+   Veckoplanering – sparar lokalt och synkar via Supabase
+   ========================================================= */
+
+/* ===================== CHANGE HERE ===================== */
+// Från Supabase: Project Settings -> API (Project URL och anon/publishable key).
+// Nyckeln är publik med avsikt – åtkomsten skyddas av radsäkerhet (RLS) i databasen.
+const SUPABASE_URL      = 'https://rofagxzsomfpgypzkjka.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_sJ5oyI9Pc6thm87d78-67A_wPz06rgG';
+const SYNC_TABLE        = 'planner_state';
+/* ======================================================= */
+
+const KEY = 'veckoplanering.v1';
+const DAYS = ['måndag','tisdag','onsdag','torsdag','fredag','lördag','söndag'];
+const MONTHS = ['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'];
+
+/* ---------- Datum ---------- */
+const pad = n => String(n).padStart(2,'0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+const monday = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); const wd = (x.getDay()+6)%7; return addDays(x,-wd); };
+const todayISO = () => iso(new Date());
+function weekNumber(d){
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day);
+  const y0 = new Date(Date.UTC(t.getUTCFullYear(),0,1));
+  return Math.ceil(((t - y0) / 864e5 + 1) / 7);
+}
+const fmtShort = d => `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+
+/* ---------- Lagring ---------- */
+const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+function firstWorkday(){ const d = new Date(); const wd = d.getDay(); return iso(addDays(d, wd===6?2:wd===0?1:0)); }
+function defaultState(){
+  const t = firstWorkday();
+  return {
+    tasks: [
+      {id:uid(), ex:true, title:'Exempel: Gå igenom veckans mål', date:t, done:true, est:15, prio:'high', tag:'Planering', comment:'Klicka på en uppgift för att öppna den.', order:0},
+      {id:uid(), ex:true, title:'Exempel: Dra mig till en annan dag', date:t, done:false, est:30, prio:'norm', tag:'', comment:'', order:1},
+      {id:uid(), ex:true, title:'Exempel: Bocka av mig', date:t, done:false, est:45, prio:'low', tag:'', comment:'', order:2},
+    ],
+    notes:{}, goals:{}, goalMin:{}, deleted:{}, stamp:{},
+    settings:{weekend:false, inbox:true, byTime:false, theme:'auto'}
+  };
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){ const s = JSON.parse(raw); return Object.assign(defaultState(), s, {settings:Object.assign(defaultState().settings, s.settings||{})}); }
+  }catch(e){}
+  return defaultState();
+}
+let state = load();
+let storageOK = true;
+state.deleted = state.deleted || {}; state.stamp = state.stamp || {};
+/* ---------- Ändringsstämplar (för synk) ----------
+   Varje uppgift får u = tid för senaste ändring, borttagna uppgifter
+   sparas som gravstenar i state.deleted, och anteckningar/mål stämplas
+   i state.stamp. Det gör att två enheter kan slås ihop utan att data tappas. */
+const MAPS = ['notes','goals','goalMin'];
+const taskSig = t => { const {u, ...rest} = t; return JSON.stringify(rest); };
+let snap = null;
+function takeSnap(){
+  snap = {tasks:{}, maps:{}};
+  state.tasks.forEach(t => snap.tasks[t.id] = taskSig(t));
+  MAPS.forEach(m => snap.maps[m] = JSON.stringify(state[m] || {}));
+  snap.mapsObj = {}; MAPS.forEach(m => snap.mapsObj[m] = Object.assign({}, state[m] || {}));
+}
+function stampChanges(){
+  if(!snap){ takeSnap(); return false; }
+  const now = Date.now(); let changed = false;
+  state.deleted = state.deleted || {}; state.stamp = state.stamp || {};
+  const seen = {};
+  state.tasks.forEach(t => {
+    seen[t.id] = 1;
+    if(snap.tasks[t.id] !== taskSig(t)){ t.u = now; if(t.ex) delete t.ex; changed = true; }
+  });
+  Object.keys(snap.tasks).forEach(id => { if(!seen[id]){ state.deleted[id] = now; changed = true; } });
+  MAPS.forEach(m => {
+    const a = snap.mapsObj[m], b = state[m] || {};
+    new Set([...Object.keys(a), ...Object.keys(b)]).forEach(k => {
+      if(String(a[k] ?? '') !== String(b[k] ?? '')){ state.stamp[m+':'+k] = now; changed = true; }
+    });
+  });
+  // rensa gravstenar äldre än 90 dagar
+  const old = now - 90*864e5;
+  Object.keys(state.deleted).forEach(id => { if(state.deleted[id] < old) delete state.deleted[id]; });
+  takeSnap();
+  return changed;
+}
+function save(){
+  const changed = stampChanges();
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }
+  catch(e){ if(storageOK){ storageOK=false; toast('Kunde inte spara – exportera en säkerhetskopia!'); } }
+  if(changed && typeof schedulePush === 'function') schedulePush();
+}
+takeSnap();
+
+/* ---------- Beräkning av framsteg ---------- */
+function tasksOn(date){ return state.tasks.filter(t => t.date === date).sort((a,b)=>a.order-b.order); }
+function dayProgress(date){
+  const ts = tasksOn(date);
+  const done = ts.filter(t=>t.done).length;
+  const goal = state.goals[date] ? Math.max(1, +state.goals[date]) : ts.length;
+  const pCount = goal ? Math.min(1, done/goal) : 0;
+  const estAll = ts.reduce((s,t)=>s+(+t.est||0),0);
+  const estDone = ts.filter(t=>t.done).reduce((s,t)=>s+(+t.est||0),0);
+  const goalMin = state.goalMin[date] ? +state.goalMin[date] : estAll;
+  const pTime = goalMin ? Math.min(1, estDone/goalMin) : 0;
+  const p = state.settings.byTime && goalMin ? pTime : pCount;
+  return {total:ts.length, done, goal, pCount, estAll, estDone, goalMin, pTime, p, reached: (goal>0 && done>=goal)};
+}
+
+/* ---------- Ring (SVG) ---------- */
+// Färg: 0 % = röd, 50 % = gul/orange, 100 % = grön
+const colorFor = p => `hsl(${Math.round(4 + 121*p)} ${70 + 5*p}% ${48 - 4*p}%)`;
+const lastP = {};   // senaste värdet per ring, så att den animeras från förra läget
+function ringSVG(size, rings, label, sublabel, key){
+  // rings: [{p, w}] utifrån och in
+  let r0 = size/2, out = '';
+  const gap = Math.max(2, size*0.03);
+  rings.forEach((rg,i) => {
+    const w = rg.w || size*0.11;
+    const r = r0 - w/2;
+    const c = 2*Math.PI*r;
+    const p = Math.max(0, Math.min(1, rg.p||0));
+    const off = c*(1-p);
+    const k = key ? key+':'+i : null;
+    const p0 = k && k in lastP ? lastP[k] : 0;
+    if(k) lastP[k] = p;
+    out += `<circle class="trk" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="${w}"/>`;
+    out += `<circle class="val" cx="${size/2}" cy="${size/2}" r="${r}" stroke-width="${w}"
+      stroke="${colorFor(p0)}" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p0)}"
+      data-off="${off}" data-col="${colorFor(p)}" style="opacity:${p>0||p0>0?1:0}"
+      transform="rotate(-90 ${size/2} ${size/2})"/>`;
+    r0 = r - w/2 - gap;
+  });
+  const fs = size*0.2;
+  let txt = '';
+  if(label!=null){
+    txt = sublabel
+      ? `<text x="50%" y="${size/2 - fs*0.25}" font-size="${fs}">${label}</text><text x="50%" y="${size/2 + fs*0.65}" font-size="${fs*0.48}" style="fill:var(--muted);font-weight:500">${sublabel}</text>`
+      : `<text x="50%" y="50%" font-size="${fs}">${label}</text>`;
+  }
+  const goal = rings[0] && rings[0].p >= 1;
+  return `<svg class="ring${goal?' goal':''}" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true">${out}${txt}</svg>`;
+}
+
+/* ---------- Vy ---------- */
+function startWeek(){ const d = new Date(), wd = d.getDay();
+  return (!state.settings.weekend && (wd===6||wd===0)) ? monday(addDays(d, 7)) : monday(d); }
+let weekStart = startWeek();
+let animateCols = true;
+const board = document.getElementById('board');
+function animateRings(root){
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    (root||document).querySelectorAll('.ring .val[data-off]').forEach(c => {
+      c.setAttribute('stroke-dashoffset', c.dataset.off);
+      c.setAttribute('stroke', c.dataset.col);
+      c.style.opacity = +c.dataset.off < +c.getAttribute('stroke-dasharray') - 0.01 ? 1 : 0;
+      c.removeAttribute('data-off');
+    });
+  }));
+}
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function visibleDates(){
+  const n = state.settings.weekend ? 7 : 5;
+  return Array.from({length:n}, (_,i) => iso(addDays(weekStart,i)));
+}
+
+function taskHTML(t){
+  const meta = [];
+  if(t.tag) meta.push(`<span class="chip">${esc(t.tag)}</span>`);
+  if(+t.est) meta.push(`<span>⏱ ${fmtMin(+t.est)}</span>`);
+  if(t.comment) meta.push(`<span title="Har kommentar">💬</span>`);
+  const fresh = t.id === justAdded, popped = t.id === justToggled;
+  return `<li class="task p-${t.prio||'norm'}${t.done?' done':''}" draggable="true" data-id="${t.id}"${fresh||animateCols?'':' style="animation:none"'}>
+    <button class="check${popped?' pop':''}" data-act="toggle" aria-label="Markera som klar"></button>
+    <div class="tbody" data-act="open">
+      <div class="title">${esc(t.title)}</div>
+      ${meta.length?`<div class="meta">${meta.join('')}</div>`:''}
+      ${t.comment?`<div class="comment-preview">${esc(t.comment.split('\n')[0])}</div>`:''}
+    </div>
+  </li>`;
+}
+const fmtMin = m => m >= 60 ? `${Math.floor(m/60)} h${m%60?' '+(m%60)+' min':''}` : `${m} min`;
+
+function render(){
+  // tema
+  const th = state.settings.theme;
+  if(th==='auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', th);
+
+  const dates = visibleDates();
+  const t0 = todayISO();
+  document.getElementById('weekNo').textContent = `Vecka ${weekNumber(weekStart)}`;
+  const last = addDays(weekStart, dates.length-1);
+  document.getElementById('weekRange').textContent = `${fmtShort(weekStart)} – ${fmtShort(last)} ${last.getFullYear()}`;
+
+  // sammanfattning
+  let wTotal=0, wDone=0, wGoalSum=0, wGoalDone=0, reached=0, daysWithTasks=0, estAll=0, estDone=0;
+  dates.forEach(d => {
+    const pr = dayProgress(d);
+    wTotal += pr.total; wDone += pr.done; estAll += pr.estAll; estDone += pr.estDone;
+    wGoalSum += pr.goal; wGoalDone += Math.min(pr.done, pr.goal);
+    if(pr.total){ daysWithTasks++; if(pr.reached) reached++; }
+  });
+  const wP = wGoalSum ? wGoalDone / wGoalSum : 0;
+  const todayIn = dates.includes(t0);
+  const tp = todayIn ? dayProgress(t0) : null;
+  const rings = [{p:wP}]; if(tp) rings.push({p:tp.p});
+  document.getElementById('sumRing').innerHTML = ringSVG(64, rings.map(r=>({p:r.p, w:8})), Math.round(wP*100)+'%', null, 'week');
+  document.getElementById('sumStats').innerHTML =
+    `<div><b>${wDone}</b> av ${wTotal} uppgifter klara denna vecka</div>
+     <div>Mål nått <b>${reached}</b> av ${daysWithTasks} dagar${estAll?` · ${fmtMin(estDone)} av ${fmtMin(estAll)}`:''}</div>
+     ${tp?`<div>Yttre ring = veckan, inre = idag (${Math.round(tp.p*100)} %)</div>`:''}`;
+
+  // kolumner
+  const cols = [];
+  if(state.settings.inbox){
+    const inbox = state.tasks.filter(t=>!t.date).sort((a,b)=>a.order-b.order);
+    cols.push(`<section class="col inbox" data-date="">
+      <div class="head"><div><div class="dayname">Inkorg</div><div class="daycount">Oplanerat · ${inbox.length} st</div></div></div>
+      <ul class="tasks" data-date="">${inbox.map(taskHTML).join('') || '<li class="empty">Dra hit sådant som inte har en dag än</li>'}</ul>
+      <form class="add" data-date=""><input placeholder="+ Ny uppgift"></form>
+    </section>`);
+  }
+  dates.forEach((d,i) => {
+    const pr = dayProgress(d);
+    const dd = parse(d);
+    const cls = ['col']; if(d===t0) cls.push('today'); if(d<t0) cls.push('past');
+    const lbl = pr.total ? Math.round(pr.p*100)+'%' : '–';
+    cols.push(`<section class="${cls.join(' ')}" data-date="${d}">
+      <div class="head" data-act="day" title="Öppna dagvy">
+        ${ringSVG(46, [{p:pr.p, w:6}], lbl, null, 'd'+d)}
+        <div>
+          <div class="dayname">${DAYS[(dd.getDay()+6)%7]}${d===t0?' · idag':''}</div>
+          <div class="daydate">${fmtShort(dd)}</div>
+          <div class="daycount">${pr.done}/${pr.goal || 0} klara${pr.reached?' ✓':''}</div>
+        </div>
+      </div>
+      <ul class="tasks" data-date="${d}">${tasksOn(d).map(taskHTML).join('')}</ul>
+      <form class="add" data-date="${d}"><input placeholder="+ Ny uppgift"></form>
+      ${pr.total>pr.done?`<div class="foot"><button data-act="moveopen">Ofärdiga → nästa dag</button></div>`:''}
+    </section>`);
+  });
+  board.classList.toggle('static', !animateCols); animateCols = false;
+  board.innerHTML = cols.join('');
+  board.style.gridTemplateColumns = `${state.settings.inbox?'minmax(190px,0.9fr) ':''}repeat(${dates.length}, minmax(200px,1fr))`;
+  if(openDay) renderDay();
+  animateRings();
+}
+
+/* ---------- Åtgärder ---------- */
+let justAdded = null, justToggled = null;
+function addTask(date, title){
+  title = title.trim(); if(!title) return;
+  const list = state.tasks.filter(t => (t.date||'') === (date||''));
+  const order = list.length ? Math.max(...list.map(t=>t.order))+1 : 0;
+  const id = uid(); justAdded = id;
+  state.tasks.push({id, title, date:date||null, done:false, est:'', prio:'norm', tag:'', comment:'', order});
+  save(); render(); justAdded = null;
+}
+function toggle(id){
+  const t = state.tasks.find(x=>x.id===id); if(!t) return;
+  const before = t.date ? dayProgress(t.date).reached : false;
+  t.done = !t.done; t.doneAt = t.done ? new Date().toISOString() : null;
+  justToggled = t.done ? id : null;
+  save(); render(); justToggled = null;
+  if(t.date && !before && dayProgress(t.date).reached){ toast('🎉 Dagens mål nått!'); confetti(t.date); }
+}
+function nextWorkday(dateStr){
+  let d = addDays(parse(dateStr || todayISO()), 1);
+  if(!state.settings.weekend){ while(d.getDay()===0 || d.getDay()===6) d = addDays(d,1); }
+  return iso(d);
+}
+function moveTo(id, date, index){
+  const t = state.tasks.find(x=>x.id===id); if(!t) return;
+  t.date = date || null;
+  const list = state.tasks.filter(x => (x.date||'')===(date||'') && x.id!==id).sort((a,b)=>a.order-b.order);
+  if(index==null || index>list.length) index = list.length;
+  list.splice(index, 0, t);
+  list.forEach((x,i)=>x.order=i);
+  save(); render();
+}
+function moveOpen(date){
+  const target = nextWorkday(date);
+  const open = tasksOn(date).filter(t=>!t.done);
+  open.forEach(t => moveTo(t.id, target));
+  toast(`${open.length} uppgift${open.length===1?'':'er'} flyttade till ${DAYS[(parse(target).getDay()+6)%7]}`);
+}
+
+/* ---------- Händelser i tavlan ---------- */
+board.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const act = el.dataset.act;
+  const li = el.closest('.task'), col = el.closest('.col');
+  if(act==='toggle') toggle(li.dataset.id);
+  else if(act==='open') openTask(li.dataset.id);
+  else if(act==='day') openDayView(col.dataset.date);
+  else if(act==='moveopen') moveOpen(col.dataset.date);
+});
+board.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target, inp = f.querySelector('input');
+  const date = f.dataset.date;
+  addTask(date, inp.value);
+  const again = board.querySelector(`form.add[data-date="${date}"] input`); if(again) again.focus();
+});
+
+/* ---------- Dra och släpp ---------- */
+let dragId = null, ph = document.createElement('li'); ph.className = 'placeholder';
+document.addEventListener('dragstart', e => {
+  const li = e.target.closest && e.target.closest('.task'); if(!li) return;
+  dragId = li.dataset.id; li.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  try{ e.dataTransfer.setData('text/plain', dragId); }catch(_){}
+});
+document.addEventListener('dragend', () => {
+  dragId = null; ph.remove();
+  document.querySelectorAll('.dragging').forEach(x=>x.classList.remove('dragging'));
+  document.querySelectorAll('.col.drop').forEach(x=>x.classList.remove('drop'));
+});
+function dropIndex(ul, y){
+  const items = [...ul.querySelectorAll('.task:not(.dragging)')];
+  for(let i=0;i<items.length;i++){
+    const r = items[i].getBoundingClientRect();
+    if(y < r.top + r.height/2) return {i, before:items[i]};
+  }
+  return {i:items.length, before:null};
+}
+board.addEventListener('dragover', e => {
+  if(!dragId) return;
+  const col = e.target.closest('.col'); if(!col) return;
+  e.preventDefault();
+  document.querySelectorAll('.col.drop').forEach(x=>{ if(x!==col) x.classList.remove('drop'); });
+  col.classList.add('drop');
+  const ul = col.querySelector('.tasks');
+  const {before} = dropIndex(ul, e.clientY);
+  const emp = ul.querySelector('.empty'); if(emp) emp.style.display='none';
+  if(before) ul.insertBefore(ph, before); else ul.appendChild(ph);
+});
+board.addEventListener('dragleave', e => {
+  const col = e.target.closest('.col');
+  if(col && !col.contains(e.relatedTarget)){ col.classList.remove('drop'); ph.remove(); }
+});
+board.addEventListener('drop', e => {
+  if(!dragId) return;
+  const col = e.target.closest('.col'); if(!col) return;
+  e.preventDefault();
+  const ul = col.querySelector('.tasks');
+  const {i} = dropIndex(ul, e.clientY);
+  const id = dragId; dragId = null; ph.remove();
+  moveTo(id, col.dataset.date, i);
+});
+
+/* ---------- Uppgiftsdialog ---------- */
+const tOv = document.getElementById('taskOverlay');
+let openTaskId = null;
+const $ = id => document.getElementById(id);
+function openTask(id){
+  const t = state.tasks.find(x=>x.id===id); if(!t) return;
+  openTaskId = id;
+  $('tTitle').value = t.title; $('tDate').value = t.date || '';
+  $('tEst').value = t.est || ''; $('tPrio').value = t.prio || 'norm';
+  $('tTag').value = t.tag || ''; $('tComment').value = t.comment || '';
+  $('taskSub').textContent = t.date ? `${DAYS[(parse(t.date).getDay()+6)%7]} ${fmtShort(parse(t.date))}${t.done?' · klar':''}` : 'Inkorg · ingen dag vald';
+  const tags = [...new Set(state.tasks.map(x=>x.tag).filter(Boolean))];
+  $('tagList').innerHTML = tags.map(x=>`<option value="${esc(x)}">`).join('');
+  tOv.classList.add('open');
+  setTimeout(()=>$('tComment').focus(), 30);
+}
+function closeTask(){ tOv.classList.remove('open'); openTaskId = null; render(); }
+function updTask(field, val){
+  const t = state.tasks.find(x=>x.id===openTaskId); if(!t) return;
+  if(field==='date'){ moveTo(t.id, val || null); return; }
+  t[field] = val; save();
+}
+$('tTitle').addEventListener('input', e => updTask('title', e.target.value));
+$('tDate').addEventListener('change', e => updTask('date', e.target.value));
+$('tEst').addEventListener('input', e => updTask('est', e.target.value ? Math.max(0, +e.target.value) : ''));
+$('tPrio').addEventListener('change', e => updTask('prio', e.target.value));
+$('tTag').addEventListener('input', e => updTask('tag', e.target.value.trim()));
+$('tComment').addEventListener('input', e => updTask('comment', e.target.value));
+$('tClose').onclick = closeTask;
+$('tDelete').onclick = () => {
+  state.tasks = state.tasks.filter(x=>x.id!==openTaskId); save(); closeTask(); toast('Uppgiften borttagen');
+};
+$('tTomorrow').onclick = () => {
+  const t = state.tasks.find(x=>x.id===openTaskId); if(!t) return;
+  const target = nextWorkday(t.date); moveTo(t.id, target);
+  $('tDate').value = target; toast(`Flyttad till ${DAYS[(parse(target).getDay()+6)%7]}`);
+};
+tOv.addEventListener('mousedown', e => { if(e.target===tOv) closeTask(); });
+
+/* ---------- Dagvy ---------- */
+const dOv = $('dayOverlay');
+let openDay = null;
+function openDayView(date){ openDay = date; renderDay(); dOv.classList.add('open'); }
+function renderDay(){
+  const d = openDay, dd = parse(d), pr = dayProgress(d);
+  $('dTitle').textContent = `${DAYS[(dd.getDay()+6)%7][0].toUpperCase()+DAYS[(dd.getDay()+6)%7].slice(1)} ${dd.getDate()} ${MONTHS[dd.getMonth()]}`;
+  $('dSub').textContent = `Vecka ${weekNumber(dd)}${d===todayISO()?' · idag':''}`;
+  const rings = [{p:pr.pCount, w:16}];
+  if(pr.goalMin) rings.push({p:pr.pTime, w:16});
+  $('dRing').innerHTML = ringSVG(150, rings, Math.round(pr.p*100)+'%', state.settings.byTime && pr.goalMin ? 'av tiden' : 'av målet', 'big'+d);
+  $('dLegend').innerHTML =
+    `<div><i style="background:${colorFor(pr.pCount)}"></i>Yttre ring: <b>${pr.done}</b> av ${pr.goal} uppgifter</div>
+     ${pr.goalMin?`<div><i style="background:${colorFor(pr.pTime)}"></i>Inre ring: <b>${fmtMin(pr.estDone)}</b> av ${fmtMin(pr.goalMin)}</div>`:'<div class="small">Ange tid på uppgifterna för att få en tidsring.</div>'}
+     ${pr.reached?'<div class="goalmsg">Dagens mål nått ✓</div>':pr.total?`<div class="small">${pr.goal-pr.done} kvar till målet</div>`:''}`;
+  if(document.activeElement !== $('dGoal')) $('dGoal').value = state.goals[d] || '';
+  if(document.activeElement !== $('dGoalMin')) $('dGoalMin').value = state.goalMin[d] || '';
+  if(document.activeElement !== $('dNote')) $('dNote').value = state.notes[d] || '';
+  $('dTasks').innerHTML = tasksOn(d).map(taskHTML).join('') || '<li class="empty">Inga uppgifter än</li>';
+  $('dTasks').querySelectorAll('.task').forEach(li => li.draggable = false);
+  animateRings(dOv);
+}
+$('dTasks').addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  const id = el.closest('.task').dataset.id;
+  if(el.dataset.act==='toggle') toggle(id);
+  else if(el.dataset.act==='open') openTask(id);
+});
+$('dAdd').addEventListener('keydown', e => { if(e.key==='Enter'){ addTask(openDay, e.target.value); e.target.value=''; } });
+$('dGoal').addEventListener('input', e => { const v=+e.target.value; if(v>0) state.goals[openDay]=v; else delete state.goals[openDay]; save(); render(); });
+$('dGoalMin').addEventListener('input', e => { const v=+e.target.value; if(v>0) state.goalMin[openDay]=v; else delete state.goalMin[openDay]; save(); render(); });
+$('dNote').addEventListener('input', e => { const v=e.target.value; if(v) state.notes[openDay]=v; else delete state.notes[openDay]; save(); });
+$('dMoveOpen').onclick = () => moveOpen(openDay);
+$('dClose').onclick = () => { dOv.classList.remove('open'); openDay = null; };
+dOv.addEventListener('mousedown', e => { if(e.target===dOv){ dOv.classList.remove('open'); openDay=null; } });
+document.addEventListener('keydown', e => {
+  if(e.key!=='Escape') return;
+  if(document.getElementById('acctOverlay').classList.contains('open')) document.getElementById('acctOverlay').classList.remove('open');
+  else if(tOv.classList.contains('open')) closeTask();
+  else if(dOv.classList.contains('open')){ dOv.classList.remove('open'); openDay=null; }
+  else menu.classList.remove('open');
+});
+
+/* ---------- Navigering & inställningar ---------- */
+$('prev').onclick = () => { weekStart = addDays(weekStart,-7); animateCols = true; render(); };
+$('next').onclick = () => { weekStart = addDays(weekStart, 7); animateCols = true; render(); };
+$('todayBtn').onclick = () => { weekStart = startWeek(); animateCols = true; render(); };
+const menu = $('menu');
+$('menuBtn').onclick = e => { e.stopPropagation(); menu.classList.toggle('open'); };
+document.addEventListener('click', e => { if(!menu.contains(e.target) && e.target!==$('menuBtn')) menu.classList.remove('open'); });
+const bindOpt = (id, key) => { const el=$(id); el.checked = !!state.settings[key];
+  el.onchange = () => { state.settings[key] = el.checked; save(); render(); }; };
+bindOpt('optWeekend','weekend'); bindOpt('optInbox','inbox'); bindOpt('optTime','byTime');
+$('optTheme').value = state.settings.theme || 'auto';
+$('optTheme').onchange = e => { state.settings.theme = e.target.value; save(); render(); };
+
+$('exportBtn').onclick = () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `veckoplanering-backup-${todayISO()}.json`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+};
+$('importBtn').onclick = () => $('importFile').click();
+$('importFile').onchange = async e => {
+  const f = e.target.files[0]; if(!f) return;
+  try{
+    const s = JSON.parse(await f.text());
+    if(!Array.isArray(s.tasks)) throw 0;
+    state = Object.assign(defaultState(), s, {settings:Object.assign(defaultState().settings, s.settings||{})});
+    save(); render(); toast('Säkerhetskopia importerad');
+  }catch(_){ toast('Kunde inte läsa filen'); }
+  e.target.value = '';
+};
+
+/* ---------- Konfetti ---------- */
+function confetti(date){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const src = document.querySelector(`.col[data-date="${date}"] .ring`) || document.getElementById('sumRing');
+  const r = src.getBoundingClientRect(), x0 = r.left + r.width/2, y0 = r.top + r.height/2;
+  const cols = ['#7b2ff7','#c13cff','#ff2e93','#ff7ac2','#b46cff','#3ddc84'];
+  for(let i=0;i<70;i++){
+    const el = document.createElement('div'); el.className = 'confetti';
+    el.style.background = cols[i%cols.length]; el.style.left = x0+'px'; el.style.top = y0+'px';
+    document.body.appendChild(el);
+    const a = Math.random()*Math.PI*2, v = 120 + Math.random()*240;
+    const dx = Math.cos(a)*v, dy = Math.sin(a)*v - 160, rot = (Math.random()-.5)*900;
+    el.animate([
+      {transform:'translate(-50%,-50%) rotate(0deg)', opacity:1},
+      {transform:`translate(${dx}px,${dy}px) rotate(${rot/2}deg)`, opacity:1, offset:.5},
+      {transform:`translate(${dx*1.3}px,${dy+320}px) rotate(${rot}deg)`, opacity:0}
+    ], {duration:1300+Math.random()*700, easing:'cubic-bezier(.2,.7,.4,1)'}).onfinish = () => el.remove();
+  }
+}
+
+/* ---------- Ljuskägla som följer musen ---------- */
+board.addEventListener('pointermove', e => {
+  const col = e.target.closest('.col'); if(!col) return;
+  const r = col.getBoundingClientRect();
+  col.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  col.style.setProperty('--my', (e.clientY - r.top) + 'px');
+});
+
+/* ---------- Toast ---------- */
+let toastT;
+function toast(msg){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'), 2200); }
+
+// Uppdatera "idag" vid midnatt om fliken står öppen
+let lastDay = todayISO();
+setInterval(()=>{ if(todayISO()!==lastDay){ lastDay=todayISO(); render(); } }, 60000);
+
+render();
+
+
+/* =========================================================
+   Synk mot Supabase
+   ========================================================= */
+const SYNC_ON = !/DIN-/.test(SUPABASE_URL + SUPABASE_ANON_KEY);
+let sb = null, sbUser = null, pushT = null, pushing = false, pushAgain = false, channel = null;
+
+// Slå ihop två tillstånd: nyast ändring vinner per uppgift/anteckning
+function mergeState(a, b){
+  const out = {deleted:{}, stamp:{}};
+  const del = Object.assign({}, a.deleted||{});
+  Object.entries(b.deleted||{}).forEach(([id,t]) => { del[id] = Math.max(del[id]||0, t); });
+  out.deleted = del;
+  const byId = {};
+  [...(a.tasks||[]), ...(b.tasks||[])].forEach(t => {
+    const cur = byId[t.id];
+    if(!cur || (t.u||0) > (cur.u||0)) byId[t.id] = t;
+  });
+  out.tasks = Object.values(byId).filter(t => !(del[t.id] && del[t.id] >= (t.u||0)));
+  const sa = a.stamp||{}, sbm = b.stamp||{};
+  MAPS.forEach(m => {
+    const res = {}, ma = a[m]||{}, mb = b[m]||{};
+    new Set([...Object.keys(ma), ...Object.keys(mb), ...Object.keys(sa).concat(Object.keys(sbm))
+      .filter(k => k.startsWith(m+':')).map(k => k.slice(m.length+1))]).forEach(k => {
+      const ta = sa[m+':'+k]||0, tb = sbm[m+':'+k]||0;
+      const src = tb > ta ? mb : ma;
+      const v = (k in src) ? src[k] : ((ta===0 && tb===0) ? (ma[k] ?? mb[k]) : undefined);
+      if(v !== undefined && v !== '') res[k] = v;
+      const st = Math.max(ta, tb); if(st) out.stamp[m+':'+k] = st;
+    });
+    out[m] = res;
+  });
+  return out;
+}
+const syncPart = st => ({tasks:st.tasks, deleted:st.deleted||{}, stamp:st.stamp||{}, notes:st.notes, goals:st.goals, goalMin:st.goalMin});
+const same = (x,y) => JSON.stringify(syncPart(x)) === JSON.stringify(syncPart(y));
+
+function applyMerged(m){
+  Object.assign(state, m);
+  takeSnap();
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(_){}
+  render();
+  if(openTaskId && !state.tasks.find(t=>t.id===openTaskId)) closeTask();
+}
+
+function setSync(s, txt){
+  const b = $('syncBtn'); b.dataset.s = s; $('syncTxt').textContent = txt;
+  const st = $('acctStatus'); if(st) st.textContent = {ok:'Allt är synkat.', busy:'Synkar…', off:'Offline – ändringar sparas lokalt och synkas när du är online igen.', err:'Synkfel – försöker igen.'}[s] || '';
+}
+
+async function pull(){
+  const {data, error} = await sb.from(SYNC_TABLE).select('data').eq('user_id', sbUser.id).maybeSingle();
+  if(error) throw error;
+  return data ? data.data : null;
+}
+async function syncNow(){
+  if(!sb || !sbUser) return;
+  if(!navigator.onLine){ setSync('off','Offline'); return; }
+  if(pushing){ pushAgain = true; return; }
+  pushing = true; setSync('busy','Synkar');
+  try{
+    const remote = await pull();
+    let local = state;
+    if(remote && remote.tasks && remote.tasks.length){
+      // första gången på en ny enhet: släng orörda exempeluppgifter
+      local = Object.assign({}, state, {tasks: state.tasks.filter(t => !(t.ex && !t.u))});
+    }
+    const merged = remote ? mergeState(local, remote) : syncPart(local);
+    if(!same(merged, state)) applyMerged(merged);
+    if(!remote || !same(merged, remote)){
+      const {error} = await sb.from(SYNC_TABLE).upsert({user_id: sbUser.id, data: syncPart(state), updated_at: new Date().toISOString()});
+      if(error) throw error;
+    }
+    setSync('ok','Synkad');
+  }catch(e){
+    console.warn('Synkfel', e); setSync(navigator.onLine ? 'err' : 'off', navigator.onLine ? 'Synkfel' : 'Offline');
+    clearTimeout(pushT); pushT = setTimeout(syncNow, 15000);
+  }finally{
+    pushing = false;
+    if(pushAgain){ pushAgain = false; schedulePush(); }
+  }
+}
+function schedulePush(){
+  if(!sb || !sbUser) return;
+  clearTimeout(pushT); pushT = setTimeout(syncNow, 800);
+}
+function listen(){
+  if(channel) sb.removeChannel(channel);
+  channel = sb.channel('plan-'+sbUser.id)
+    .on('postgres_changes', {event:'*', schema:'public', table:SYNC_TABLE, filter:'user_id=eq.'+sbUser.id}, payload => {
+      const remote = payload.new && payload.new.data; if(!remote) return;
+      const merged = mergeState(state, remote);
+      if(!same(merged, state)) applyMerged(merged);
+      if(!same(merged, remote)) schedulePush();
+    }).subscribe();
+}
+async function onAuth(user){
+  sbUser = user || null;
+  $('acctOut').hidden = !!sbUser; $('acctIn').hidden = !sbUser;
+  if(sbUser){
+    $('aWho').textContent = sbUser.email;
+    $('acctSub').textContent = 'Dina uppgifter synkas mellan alla enheter där du är inloggad';
+    listen(); syncNow();
+  }else{
+    if(channel){ sb.removeChannel(channel); channel = null; }
+    $('acctSub').textContent = 'Logga in för att synka mellan dator och mobil';
+    setSync('', 'Logga in');
+  }
+}
+
+/* ---------- Kontodialog ---------- */
+const aOv = $('acctOverlay');
+$('syncBtn').onclick = () => { aOv.classList.add('open'); if(!sbUser) setTimeout(()=>$('aEmail').focus(), 30); };
+const closeAcct = () => aOv.classList.remove('open');
+$('aClose').onclick = closeAcct;
+aOv.addEventListener('mousedown', e => { if(e.target===aOv) closeAcct(); });
+const aMsg = t => $('acctMsg').textContent = t;
+const svFel = m => /Invalid login/i.test(m) ? 'Fel e-post eller lösenord.' :
+  /Email not confirmed/i.test(m) ? 'Bekräfta kontot via länken i mejlet först.' :
+  /already registered/i.test(m) ? 'Det finns redan ett konto med den adressen – logga in.' :
+  /Password should be/i.test(m) ? 'Lösenordet måste vara minst 6 tecken.' : m;
+$('aLogin').onclick = async () => {
+  if(!sb){ aMsg('Synk är inte tillgänglig just nu – kontrollera internet.'); return; }
+  aMsg('Loggar in…');
+  const {error} = await sb.auth.signInWithPassword({email:$('aEmail').value.trim(), password:$('aPass').value});
+  if(error) aMsg(svFel(error.message)); else { aMsg(''); $('aPass').value=''; toast('Inloggad – synkar'); }
+};
+$('aSignup').onclick = async () => {
+  if(!sb){ aMsg('Synk är inte tillgänglig just nu – kontrollera internet.'); return; }
+  aMsg('Skapar konto…');
+  const {data, error} = await sb.auth.signUp({email:$('aEmail').value.trim(), password:$('aPass').value,
+    options:{emailRedirectTo: location.origin + location.pathname}});
+  if(error) aMsg(svFel(error.message));
+  else if(!data.session) aMsg('Klart! Öppna mejlet och klicka på bekräftelselänken, logga sedan in här.');
+  else aMsg('');
+};
+$('aPass').addEventListener('keydown', e => { if(e.key==='Enter') $('aLogin').click(); });
+$('aLogout').onclick = async () => { await sb.auth.signOut(); closeAcct(); toast('Utloggad – uppgifterna finns kvar lokalt'); };
+$('aSyncNow').onclick = () => syncNow();
+
+if(SYNC_ON){
+  $('syncBtn').hidden = false;
+  if(window.supabase && window.supabase.createClient){
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {auth:{persistSession:true, autoRefreshToken:true}});
+    sb.auth.getSession().then(({data}) => onAuth(data.session && data.session.user));
+    sb.auth.onAuthStateChange((ev, session) => { if(ev==='SIGNED_IN' || ev==='SIGNED_OUT') onAuth(session && session.user); });
+  }else{
+    setSync('off','Offline');
+  }
+  window.addEventListener('online', () => syncNow());
+  window.addEventListener('offline', () => setSync('off','Offline'));
+  document.addEventListener('visibilitychange', () => { if(document.visibilityState==='visible') syncNow(); });
+}
+
+/* ---------- Installerbar app ---------- */
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+// Be webbläsaren att inte rensa datan automatiskt
+if(navigator.storage && navigator.storage.persist){ navigator.storage.persist().catch(()=>{}); }
+// Installera-knapp i menyn (Chrome/Edge)
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; $('installBtn').hidden = false; });
+$('installBtn').onclick = async () => { if(!installEvt) return; installEvt.prompt(); await installEvt.userChoice; installEvt = null; $('installBtn').hidden = true; };
+window.addEventListener('appinstalled', () => toast('Appen är installerad'));
+</script>
+</body>
+</html>
